@@ -78,7 +78,7 @@ public static class ServiceCollectionExtension
 
             var firstParam = ctor.GetParameters().FirstOrDefault();
 
-            if (firstParam == null || firstParam.ParameterType != typeof(IServiceCollection))
+            if (firstParam == null || firstParam.ParameterType == typeof(IServiceCollection))
                 yield return type;
         }
     }
