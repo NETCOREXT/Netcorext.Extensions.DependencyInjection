@@ -1,1 +1,1 @@
-static void Main() { }
+void Main() { }

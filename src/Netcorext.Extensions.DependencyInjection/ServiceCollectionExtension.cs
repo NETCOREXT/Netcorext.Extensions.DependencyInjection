@@ -14,15 +14,24 @@ public static class ServiceCollectionExtension
     {
         if (services == null) throw new ArgumentNullException(nameof(services));
 
-        if (configTypes == null) throw new ArgumentNullException(nameof(configTypes));
-
-        if (!configTypes.Any()) return services;
+        if (configTypes == null || !configTypes.Any()) throw new ArgumentNullException(nameof(configTypes));
 
         foreach (var t in configTypes)
         {
+            var ctor = t.GetConstructors().FirstOrDefault();
+
+            if (ctor == null) continue;
+
+            var ctorParams = ctor.GetParameters();
+
+            if (!ctorParams.Any())
+            {
+                Activator.CreateInstance(t);
+
+                continue;
+            }
+
             var args = new List<object>();
-            var ctor = t.GetConstructors();
-            var ctorParams = ctor[0].GetParameters();
 
             foreach (var p in ctorParams)
             {
@@ -41,7 +50,7 @@ public static class ServiceCollectionExtension
                 }
             }
 
-            if (args.Count == 0) continue;
+            if (args.Count != ctorParams.Length) continue;
 
             Activator.CreateInstance(t, args.ToArray());
         }
@@ -63,15 +72,14 @@ public static class ServiceCollectionExtension
 
         foreach (var type in types)
         {
-            var ctor = type.GetConstructors();
-            var firstParam = ctor[0].GetParameters().FirstOrDefault();
+            var ctor = type.GetConstructors().FirstOrDefault();
 
-            if (firstParam == null) continue;
+            if (ctor == null) continue;
 
-            if (firstParam.ParameterType != typeof(IServiceCollection))
-                continue;
+            var firstParam = ctor.GetParameters().FirstOrDefault();
 
-            yield return type;
+            if (firstParam == null || firstParam.ParameterType != typeof(IServiceCollection))
+                yield return type;
         }
     }
 }

@@ -1,5 +1,9 @@
-# Netcorext.Extensions
+# Netcorext.Extensions.DependencyInjection
+[![Nuget](https://img.shields.io/nuget/v/Netcorext.Extensions.DependencyInjection)](https://www.nuget.org/packages/Netcorext.Extensions.DependencyInjection)
+
 Extended for Microsoft.Extensions.DependencyInjection.
+
+---
 
 ## Example for ASP.NET 6
 ### Step 1
