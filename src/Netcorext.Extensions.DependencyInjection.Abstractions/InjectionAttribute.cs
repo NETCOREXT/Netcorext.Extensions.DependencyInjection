@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Netcorext.Extensions.DependencyInjection;
+namespace Microsoft.Extensions.DependencyInjection;
 
 [AttributeUsage(AttributeTargets.Class, Inherited = false)]
 public class InjectionAttribute : Attribute

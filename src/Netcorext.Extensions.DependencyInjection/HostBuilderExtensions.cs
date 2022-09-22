@@ -1,6 +1,5 @@
 using System.Reflection;
 using Microsoft.Extensions.Hosting;
-using Netcorext.Extensions.DependencyInjection;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
