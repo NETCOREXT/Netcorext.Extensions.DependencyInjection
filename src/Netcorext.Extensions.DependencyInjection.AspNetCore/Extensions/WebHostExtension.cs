@@ -6,9 +6,9 @@ public static class WebHostExtension
 {
     public static IWebHostBuilder ConfigureDependencyInjections(this IWebHostBuilder builder, params object[] initObjects)
     {
-        return ConfigureDependencyInjections(builder, GetInjectionTypes().ToArray(), initObjects); 
+        return ConfigureDependencyInjections(builder, GetInjectionTypes().ToArray(), initObjects);
     }
-    
+
     private static IWebHostBuilder ConfigureDependencyInjections(this IWebHostBuilder builder, Type[] configTypes, params object[] initObjects)
     {
         if (builder == null) throw new ArgumentNullException(nameof(builder));
