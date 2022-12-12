@@ -7,9 +7,37 @@ public static class ServiceCollectionExtension
 {
     public static IServiceCollection AddOrReplace<TService, TImplementation>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Transient) where TService : class
     {
-        return services.AddOrReplace(typeof(TService), typeof(TImplementation), lifetime);
+        services.RemoveAll(typeof(TService));
+
+        var descriptor = new ServiceDescriptor(typeof(TService), typeof(TImplementation), lifetime);
+
+        services.Add(descriptor);
+
+        return services;
     }
 
+    public static IServiceCollection AddOrReplace<TService, TImplementation>(this IServiceCollection services, TImplementation instance) where TService : class
+    {
+        services.RemoveAll(typeof(TService));
+
+        var descriptor = new ServiceDescriptor(typeof(TService), instance!);
+
+        services.Add(descriptor);
+
+        return services;
+    }
+    
+    public static IServiceCollection AddOrReplace<TService>(this IServiceCollection services, Func<IServiceProvider, object> factory, ServiceLifetime lifetime = ServiceLifetime.Transient) where TService : class
+    {
+        services.RemoveAll(typeof(TService));
+
+        var descriptor = new ServiceDescriptor(typeof(TService), factory, lifetime);
+
+        services.Add(descriptor);
+
+        return services;
+    }
+    
     public static IServiceCollection AddOrReplace(this IServiceCollection services, Type serviceType, Type implementationType, ServiceLifetime lifetime = ServiceLifetime.Transient)
     {
         services.RemoveAll(serviceType);
@@ -32,7 +60,7 @@ public static class ServiceCollectionExtension
         return services;
     }
 
-    public static IServiceCollection AddOrReplace(this IServiceCollection services, Type serviceType, object instance, ServiceLifetime lifetime = ServiceLifetime.Transient)
+    public static IServiceCollection AddOrReplace(this IServiceCollection services, Type serviceType, object instance)
     {
         services.RemoveAll(serviceType);
 
@@ -79,7 +107,7 @@ public static class ServiceCollectionExtension
                 }
                 else
                 {
-                    var svc = initObjects.FirstOrDefault(t => t.GetType() == p.ParameterType || p.ParameterType.IsInstanceOfType(t));
+                    var svc = initObjects.FirstOrDefault(t2 => t2.GetType() == p.ParameterType || p.ParameterType.IsInstanceOfType(t2));
 
                     if (svc != null)
                     {
